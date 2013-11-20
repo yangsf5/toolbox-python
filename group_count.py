@@ -4,7 +4,6 @@
 import commands
 import getopt
 import re
-from sets import Set
 import sys
 
 def usage():
@@ -35,7 +34,7 @@ def main(argv):
             
 def stat():
     reg = re.compile(_reg)
-    args = Set()
+    args = set()
 
     f = file(_file_name)
     while True:
