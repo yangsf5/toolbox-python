@@ -3,17 +3,19 @@
 
 import commands
 import getopt
+import re
+from sets import Set
 import sys
 
 def usage():
     print 'usage:'
     print '-h\n\thelp'
     print '-f filename\n\tparse this file'
-    print 'arg arg arg ...'
+    print '-r reg\n\tregex string, need \'\' or ""'
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, 'hf:')
+        opts, args = getopt.getopt(argv, 'hf:r:')
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -25,17 +27,30 @@ def main(argv):
         elif opt == '-f':
             global _file_name
             _file_name = arg
-
-    global _args
-    _args = args
-    if len(_args) == 0:
-        print 'error: args is empty'
-        sys.exit(2)
+        elif opt == '-r':
+            global _reg
+            _reg = arg
 
     stat()
             
 def stat():
-    for arg in _args:
+    reg = re.compile(_reg)
+    args = Set()
+
+    f = file(_file_name)
+    while True:
+        line = f.readline()
+        if len(line) == 0:
+            break
+
+        ret = reg.search(line)
+        if ret == None:
+            pass
+        else:
+            args.add(ret.group())
+    f.close()
+
+    for arg in args:
         output = commands.getoutput('grep %s %s -c' % (arg, _file_name))
         print 'count of %s: %s' % (arg, output)
 
