@@ -50,8 +50,8 @@ def stat():
     f.close()
 
     for arg in args:
-        output = commands.getoutput('grep %s %s -c' % (arg, _file_name))
-        print 'count of %s: %s' % (arg, output)
+        output = commands.getoutput('grep "%s" %s -c' % (arg, _file_name))
+        print 'count of "%s": %s' % (arg, output)
 
 
 if __name__ == '__main__':
